@@ -1,18 +1,15 @@
-// opentdbからJSONファイルを取得
-function getQuiz() {
+// Fetch APIを使ってクイズデータを取得する
+function fetchQuiz() {
     return fetch('https://opentdb.com/api.php?amount=10&category=18&type=multiple')
-    .then(function(response) {
+    .then(response => {
         return response.json();
     })
-    .then(function(myJson) {
+    .then(myJson => {
         return JSON.stringify(myJson);
-    })
+    });
 }
 
-const quiz = getQuiz();
-console.log(quiz);
-
-// fetchで取得したPromiseの問題文(question)を表示したいができず
-// undefinedになる
-console.log(quiz.results);
-
+// 返り値(promiseオブジェクト)から値を取得する
+fetchQuiz().then(results => {
+    console.log(results);
+});
