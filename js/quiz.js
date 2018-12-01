@@ -6,7 +6,7 @@ function fetchQuiz() {
     });
 }
 
-// 返り値(promiseオブジェクト)から値を取得する
+// 取得したデータの確認
 fetchQuiz().then(response => {
     console.log(response);
 });
