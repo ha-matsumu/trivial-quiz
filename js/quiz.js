@@ -7,9 +7,10 @@ function fetchQuiz() {
 }
 
 // 取得したデータの確認
-/*fetchQuiz().then(response => {
-    console.log(response);
-});*/
+const quizzesData = fetchQuiz().then(response => {
+    return response;
+});
+console.log(quizzesData);
 
 // 配列内の値をシャッフルする関数
 function shuffle(arr) {
@@ -26,7 +27,44 @@ function shuffle(arr) {
 }
 
 // 関数shuffleの動作確認
-let nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+/*let nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 console.log(nums);
-console.log(shuffle(nums));
+console.log(shuffle(nums));*/
+
+// 指定したインデックス番号に応じたクイズデータを取得してクイズ情報を生成する関数
+let quizzes = [];
+function acquireQuiz(index) {
+    let quiz = {};
+
+    // 問題文の追加
+    quiz.question = quizzesData.then(response => {
+        return response.results;
+    }).then(response => {
+        return response[index].question;
+    });
+    console.log(quiz.question);
+
+    // シャッフルされた解答一覧の追加
+    quiz.answer = [];
+    // 正解を配列に追加
+    quiz.answer.push(quizzesData.then(response => {
+        return response.results;
+    }).then(response => {
+        return response[index].correct_answer;
+    }));
+
+    // 不正解を配列に追加
+    quiz.answer = quiz.answer.concat(quizzesData.then(response => {
+        return response.results;
+    }).then(response => {
+        return response[index].incorrect_answers;
+    }));
+
+    console.log(quiz.answer);
+    quizzes.push(quiz);
+
+}
+
+acquireQuiz(0);
+console.log(quizzes);
 
