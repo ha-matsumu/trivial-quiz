@@ -25,8 +25,3 @@ function shuffle(arr) {
     return arr;
 }
 
-// 関数shuffleの動作確認
-// let nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-// console.log(nums);
-// console.log(shuffle(nums));
-
