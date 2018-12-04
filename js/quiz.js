@@ -14,12 +14,12 @@ console.log(quizzesData);
 
 // 配列内の値をシャッフルする関数
 function shuffle(arr) {
-    for(let i = arr.length - 1; i >= 0; i--) {
+    for(let i = 0; i < arr.length; i++) {
         // 0 ~ 配列の長さ-1の範囲でランダムな値を取得する
-        let random = Math.floor(Math.random() * (i + 1));
+        const random = Math.floor(Math.random() * (i + 1));
 
         // 配列内をシャッフルする
-        let tmp = arr[i];
+        const tmp = arr[i];
         arr[i] = arr[random];
         arr[random] = tmp;
     }
