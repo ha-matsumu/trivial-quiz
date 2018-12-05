@@ -26,11 +26,7 @@ function shuffle(arr) {
     return arr;
 }
 
-<<<<<<< HEAD
-// 関数shuffleの動作確認
-/*let nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
-console.log(nums);
-console.log(shuffle(nums));*/
+
 
 // 指定したインデックス番号に応じたクイズデータを取得してクイズ情報を生成する関数
 let quizzes = [];
@@ -69,5 +65,3 @@ function acquireQuiz(index) {
 acquireQuiz(0);
 console.log(quizzes);
 
-=======
->>>>>>> master
