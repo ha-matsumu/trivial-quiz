@@ -14,18 +14,19 @@ console.log(quizzesData);
 
 // 配列内の値をシャッフルする関数
 function shuffle(arr) {
-    for(let i = arr.length - 1; i >= 0; i--) {
+    for(let i = 0; i < arr.length; i++) {
         // 0 ~ 配列の長さ-1の範囲でランダムな値を取得する
-        let random = Math.floor(Math.random() * (i + 1));
+        const random = Math.floor(Math.random() * (i + 1));
 
         // 配列内をシャッフルする
-        let tmp = arr[i];
+        const tmp = arr[i];
         arr[i] = arr[random];
         arr[random] = tmp;
     }
     return arr;
 }
 
+<<<<<<< HEAD
 // 関数shuffleの動作確認
 /*let nums = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
 console.log(nums);
@@ -68,3 +69,5 @@ function acquireQuiz(index) {
 acquireQuiz(0);
 console.log(quizzes);
 
+=======
+>>>>>>> master
