@@ -29,11 +29,12 @@ function acquireQuiz(quizIndex) {
         console.log("クイズデータ : ", response.results);  // TODO:後で消す
         return response.results;
     }).then(quizDataList => {
-        console.log("問題文 : ", quizDataList[quizIndex].question);  // TODO:後で消す
+        const currentQuiz = quizDataList[quizIndex];
+        console.log("問題文 : ", currentQuiz.question);  // TODO:後で消す
 
         const quizAnswers = [];
-        quizAnswers.push(quizDataList[quizIndex].correct_answer);
-        (quizDataList[quizIndex].incorrect_answers).forEach(incorrect_answer => {
+        quizAnswers.push(currentQuiz.correct_answer);
+        currentQuiz.incorrect_answers.forEach(incorrect_answer => {
             quizAnswers.push(incorrect_answer);
         });
         console.log("シャッフルした後のクイズの解答 : ", shuffleQuizAnswers(quizAnswers));  //TODO:後で消す
