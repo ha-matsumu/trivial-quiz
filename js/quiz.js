@@ -20,6 +20,7 @@ function shuffleQuizAnswers(arr) {
     return arr;
 }
 
+
 const currentQuizIndex = 0;
 
 // 指定したインデックス番号に応じたクイズデータを取得してクイズ情報を生成する関数
