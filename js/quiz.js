@@ -20,24 +20,24 @@ function shuffleQuizAnswers(_arr) {
     return _arr;
 }
 
-
-const currentQuizIndex = 0;
+const fetchQuizJson = fetchQuiz();
+console.log("クイズデータ : ", fetchQuizJson);  // TODO:後で消す
+let currentQuizIndex = 0;
 
 // 指定したインデックス番号に応じたクイズデータを取得してクイズ情報を生成する関数
 function acquireQuiz(_quizIndex) {
-    fetchQuiz().then(response => {
-        console.log("クイズデータ : ", response.results);  // TODO:後で消す
+    fetchQuizJson.then(response => {
         return response.results;
     }).then(quizDataList => {
         const currentQuiz = quizDataList[_quizIndex];
-        console.log("問題文 : ", currentQuiz.question);  // TODO:後で消す
+        console.log(_quizIndex+1, ".問題文 : ", currentQuiz.question);  // TODO:後で消す
 
         const quizAnswers = [];
         quizAnswers.push(currentQuiz.correct_answer);
         currentQuiz.incorrect_answers.forEach(incorrect_answer => {
             quizAnswers.push(incorrect_answer);
         });
-        console.log("シャッフルした後のクイズの解答 : ", shuffleQuizAnswers(quizAnswers));  //TODO:後で消す
+        console.log(_quizIndex+1, ".シャッフルした後のクイズの解答 : ", shuffleQuizAnswers(quizAnswers));  //TODO:後で消す
 
         // TODO:この後「問題文とシャッフルしたクイズの解答をHTMLにセットする(DOM操作)を行う関数」を実行する
         const DivCurrentQuizQuestion = document.getElementById("currentQuizQuestion");
@@ -60,6 +60,10 @@ function addLisToUl(_quizAnswers) {
     for(let i = 0; i < _quizAnswers.length; i++) {
         const liQuizAnswer = document.createElement("li");
         liQuizAnswer.textContent = _quizAnswers[i];
+        liQuizAnswer.addEventListener("click", () => {
+            currentQuizIndex++;
+            acquireQuiz(currentQuizIndex);
+        });
         ulCurrentQuizAnswers.appendChild(liQuizAnswer);
     }
 }
