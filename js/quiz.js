@@ -7,29 +7,29 @@ function fetchQuiz() {
 }
 
 // 配列内の値をシャッフルする関数
-function shuffleQuizAnswers(arr) {
-    for(let i = 0; i < arr.length; i++) {
+function shuffleQuizAnswers(_arr) {
+    for(let i = 0; i < _arr.length; i++) {
         // 0 ~ 配列の長さ-1の範囲でランダムな値を取得する
         const random = Math.floor(Math.random() * (i + 1));
 
         // 配列内をシャッフルする
-        const tmp = arr[i];
-        arr[i] = arr[random];
-        arr[random] = tmp;
+        const tmp = _arr[i];
+        _arr[i] = _arr[random];
+        _arr[random] = tmp;
     }
-    return arr;
+    return _arr;
 }
 
 
 const currentQuizIndex = 0;
 
 // 指定したインデックス番号に応じたクイズデータを取得してクイズ情報を生成する関数
-function acquireQuiz(quizIndex) {
+function acquireQuiz(_quizIndex) {
     fetchQuiz().then(response => {
         console.log("クイズデータ : ", response.results);  // TODO:後で消す
         return response.results;
     }).then(quizDataList => {
-        const currentQuiz = quizDataList[quizIndex];
+        const currentQuiz = quizDataList[_quizIndex];
         console.log("問題文 : ", currentQuiz.question);  // TODO:後で消す
 
         const quizAnswers = [];
@@ -40,8 +40,26 @@ function acquireQuiz(quizIndex) {
         console.log("シャッフルした後のクイズの解答 : ", shuffleQuizAnswers(quizAnswers));  //TODO:後で消す
 
         // TODO:この後「問題文とシャッフルしたクイズの解答をHTMLにセットする(DOM操作)を行う関数」を実行する
+        const DivCurrentQuizQuestion = document.getElementById("currentQuizQuestion");
+        DivCurrentQuizQuestion.textContent = currentQuiz.question;
+        addLisToUl(quizAnswers);
     });
 }
 
 acquireQuiz(currentQuizIndex);
 
+function addLisToUl(_quizAnswers) {
+    const ulCurrentQuizAnswers = document.getElementById("currentQuizAnswers");
+
+    // ulタグ内を空にする
+    while(ulCurrentQuizAnswers.firstChild) {
+        ulCurrentQuizAnswers.removeChild(ulCurrentQuizAnswers.firstChild);
+    }
+
+    // クイズの解答数に応じてliタグをulタグに追加する
+    for(let i = 0; i < _quizAnswers.length; i++) {
+        const liQuizAnswer = document.createElement("li");
+        liQuizAnswer.textContent = _quizAnswers[i];
+        ulCurrentQuizAnswers.appendChild(liQuizAnswer);
+    }
+}
