@@ -43,7 +43,8 @@ function acquireQuiz(_quizIndex) {
 
         // TODO:この後「問題文とシャッフルしたクイズの解答をHTMLにセットする(DOM操作)を行う関数」を実行する
         divCurrentQuizQuestion.textContent = currentQuiz.question;
-        appendAnswersToContainer(shuffleQuizAnswers(currentQuizAnswers));
+        const shuffledAnswers = shuffleQuizAnswers(currentQuizAnswers);
+        appendAnswersToContainer(shuffledAnswers);
     });
 }
 
@@ -54,9 +55,9 @@ function appendAnswersToContainer(_quizAnswers) {
     }
 
     // クイズの解答数に応じてliタグをulタグに追加する
-    for(let i = 0; i < _quizAnswers.length; i++) {
+    _quizAnswers.forEach((answer) => {
         const liQuizAnswer = document.createElement("li");
-        liQuizAnswer.textContent = _quizAnswers[i];
+        liQuizAnswer.textContent = answer;
         ulCurrentQuizAnswers.appendChild(liQuizAnswer);
-    }
+    });
 }
