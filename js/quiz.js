@@ -34,18 +34,16 @@ function acquireQuiz(_quizIndex) {
         return response.results;
     }).then(quizDataList => {
         const currentQuiz = quizDataList[_quizIndex];
-        console.log("問題文 : ", currentQuiz.question);  // TODO:後で消す
 
         const currentQuizAnswers = [];
         currentQuizAnswers.push(currentQuiz.correct_answer);
         currentQuiz.incorrect_answers.forEach(incorrect_answer => {
             currentQuizAnswers.push(incorrect_answer);
         });
-        console.log("シャッフルした後のクイズの解答 : ", shuffleQuizAnswers(currentQuizAnswers));  //TODO:後で消す
 
         // TODO:この後「問題文とシャッフルしたクイズの解答をHTMLにセットする(DOM操作)を行う関数」を実行する
         divCurrentQuizQuestion.textContent = currentQuiz.question;
-        appendAnswersToContainer(currentQuizAnswers);
+        appendAnswersToContainer(shuffleQuizAnswers(currentQuizAnswers));
     });
 }
 
