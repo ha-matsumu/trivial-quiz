@@ -13,17 +13,18 @@ function fetchQuiz() {
 }
 
 // 配列内の値をシャッフルする関数
-function shuffleQuizAnswers(_answer) {
-    for(let i = 0; i < _answer.length; i++) {
+function shuffleQuizAnswers(_answers) {
+    const copiedCurrentQuizAnswers = _answers.slice();
+    for(let i = 0; i < copiedCurrentQuizAnswers.length; i++) {
         // 0 ~ 配列の長さ-1の範囲でランダムな値を取得する
         const random = Math.floor(Math.random() * (i + 1));
 
         // 配列内をシャッフルする
-        const tmp = _answer[i];
-        _answer[i] = _answer[random];
-        _answer[random] = tmp;
+        const tmp = copiedCurrentQuizAnswers[i];
+        copiedCurrentQuizAnswers[i] = copiedCurrentQuizAnswers[random];
+        copiedCurrentQuizAnswers[random] = tmp;
     }
-    return _answer;
+    return copiedCurrentQuizAnswers;
 }
 
 // 指定したインデックス番号に応じたクイズデータを取得してクイズ情報を生成する関数
@@ -35,16 +36,16 @@ function acquireQuiz(_quizIndex) {
         const currentQuiz = quizDataList[_quizIndex];
         console.log("問題文 : ", currentQuiz.question);  // TODO:後で消す
 
-        const quizAnswers = [];
-        quizAnswers.push(currentQuiz.correct_answer);
+        const currentQuizAnswers = [];
+        currentQuizAnswers.push(currentQuiz.correct_answer);
         currentQuiz.incorrect_answers.forEach(incorrect_answer => {
-            quizAnswers.push(incorrect_answer);
+            currentQuizAnswers.push(incorrect_answer);
         });
-        console.log("シャッフルした後のクイズの解答 : ", shuffleQuizAnswers(quizAnswers));  //TODO:後で消す
+        console.log("シャッフルした後のクイズの解答 : ", shuffleQuizAnswers(currentQuizAnswers));  //TODO:後で消す
 
         // TODO:この後「問題文とシャッフルしたクイズの解答をHTMLにセットする(DOM操作)を行う関数」を実行する
         divCurrentQuizQuestion.textContent = currentQuiz.question;
-        appendAnswersToContainer(quizAnswers);
+        appendAnswersToContainer(currentQuizAnswers);
     });
 }
 
