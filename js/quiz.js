@@ -5,7 +5,20 @@ let currentQuiz;
 const currentQuizAnswers = [];
 let currentQuizIndex = 0;
 
-acquireQuizDataList();
+// Fetch APIを使ってクイズデータを取得する
+// そして、１問目のクイズ情報を作成してHTMLにセットする
+fetch('https://opentdb.com/api.php?amount=10')
+    .then(response => {
+        return response.json();
+    }).then(response => {
+        return response.results;
+    }).then(data => {
+        quizDataList = data;
+        console.log("クイズデータ : ", quizDataList);  // TODO:後で消す  
+            
+        prepareCurrentQuiz(currentQuizIndex);
+        setCurrentQuiz(currentQuizIndex);      
+});
 
 // 配列内の値をシャッフルする関数
 function shuffleQuizAnswers(_answers) {
@@ -22,22 +35,6 @@ function shuffleQuizAnswers(_answers) {
     return copiedCurrentQuizAnswers;
 }
 
-// 指定したインデックス番号に応じたクイズデータを取得してクイズ情報を生成する関数
-function acquireQuizDataList() {
-    fetch('https://opentdb.com/api.php?amount=10')
-        .then(response => {
-            return response.json();
-        }).then(response => {
-            return response.results;
-        }).then(data => {
-            quizDataList = data;
-            console.log("クイズデータ : ", quizDataList);  // TODO:後で消す  
-            
-            prepareCurrentQuiz(currentQuizIndex);
-            setCurrentQuiz(currentQuizIndex);      
-        });
-}
-
 function appendAnswersToContainer(_quizAnswers) {
     // ulタグ内を空にする
     while(ulCurrentQuizAnswers.firstChild) {
@@ -50,7 +47,7 @@ function appendAnswersToContainer(_quizAnswers) {
         liQuizAnswer.textContent = answer;
         liQuizAnswer.addEventListener("click", () => {
             currentQuizIndex++;
-            acquireCurrentQuiz(currentQuizIndex);
+            prepareCurrentQuiz(currentQuizIndex);
             setCurrentQuiz(currentQuizIndex);
         });
         ulCurrentQuizAnswers.appendChild(liQuizAnswer);
