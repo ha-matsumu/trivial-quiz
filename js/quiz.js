@@ -1,17 +1,11 @@
 const divCurrentQuizQuestion = document.getElementById("currentQuizQuestion");
 const ulCurrentQuizAnswers = document.getElementById("currentQuizAnswers");
+let quizDataList;
+let currentQuiz;
+const currentQuizAnswers = [];
 let currentQuizIndex = 0;
-const fetchQuizJson = fetchQuiz();
-console.log("クイズデータ : ", fetchQuizJson);  // TODO:後で消す
-acquireQuiz(currentQuizIndex);
 
-// Fetch APIを使ってクイズデータを取得する
-function fetchQuiz() {
-    return fetch('https://opentdb.com/api.php?amount=10&category=18&type=multiple')
-    .then(response => {
-        return response.json();
-    });
-}
+acquireQuizDataList();
 
 // 配列内の値をシャッフルする関数
 function shuffleQuizAnswers(_answers) {
@@ -29,23 +23,19 @@ function shuffleQuizAnswers(_answers) {
 }
 
 // 指定したインデックス番号に応じたクイズデータを取得してクイズ情報を生成する関数
-function acquireQuiz(_quizIndex) {
-    fetchQuizJson.then(response => {
-        return response.results;
-    }).then(quizDataList => {
-        const currentQuiz = quizDataList[_quizIndex];
-
-        const currentQuizAnswers = [];
-        currentQuizAnswers.push(currentQuiz.correct_answer);
-        currentQuiz.incorrect_answers.forEach(incorrect_answer => {
-            currentQuizAnswers.push(incorrect_answer);
+function acquireQuizDataList() {
+    fetch('https://opentdb.com/api.php?amount=10')
+        .then(response => {
+            return response.json();
+        }).then(response => {
+            return response.results;
+        }).then(data => {
+            quizDataList = data;
+            console.log("クイズデータ : ", quizDataList);  // TODO:後で消す  
+            
+            prepareCurrentQuiz(currentQuizIndex);
+            setCurrentQuiz(currentQuizIndex);      
         });
-
-        // TODO:この後「問題文とシャッフルしたクイズの解答をHTMLにセットする(DOM操作)を行う関数」を実行する
-        divCurrentQuizQuestion.textContent = currentQuiz.question;
-        const shuffledAnswers = shuffleQuizAnswers(currentQuizAnswers);
-        appendAnswersToContainer(shuffledAnswers);
-    });
 }
 
 function appendAnswersToContainer(_quizAnswers) {
@@ -60,8 +50,25 @@ function appendAnswersToContainer(_quizAnswers) {
         liQuizAnswer.textContent = answer;
         liQuizAnswer.addEventListener("click", () => {
             currentQuizIndex++;
-            acquireQuiz(currentQuizIndex);
+            acquireCurrentQuiz(currentQuizIndex);
+            setCurrentQuiz(currentQuizIndex);
         });
         ulCurrentQuizAnswers.appendChild(liQuizAnswer);
     });
+}
+
+function prepareCurrentQuiz(_quizIndex) {
+    currentQuiz = quizDataList[_quizIndex];
+
+    currentQuizAnswers.splice(0, currentQuizAnswers.length);
+    currentQuizAnswers.push(currentQuiz.correct_answer);
+    currentQuiz.incorrect_answers.forEach(incorrect_answer => {
+        currentQuizAnswers.push(incorrect_answer);
+    });
+}
+
+function setCurrentQuiz(_quizIndex) {
+    divCurrentQuizQuestion.textContent = currentQuiz.question;
+    const shuffledAnswers = shuffleQuizAnswers(currentQuizAnswers);
+    appendAnswersToContainer(shuffledAnswers);
 }
