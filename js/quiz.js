@@ -1,3 +1,9 @@
+const divCurrentQuizQuestion = document.getElementById("currentQuizQuestion");
+const ulCurrentQuizAnswers = document.getElementById("currentQuizAnswers");
+const currentQuizIndex = 0;
+
+acquireQuiz(currentQuizIndex);
+
 // Fetch APIを使ってクイズデータを取得する
 function fetchQuiz() {
     return fetch('https://opentdb.com/api.php?amount=10&category=18&type=multiple')
@@ -7,41 +13,51 @@ function fetchQuiz() {
 }
 
 // 配列内の値をシャッフルする関数
-function shuffleQuizAnswers(arr) {
-    for(let i = 0; i < arr.length; i++) {
+function shuffleQuizAnswers(_answers) {
+    const copiedCurrentQuizAnswers = _answers.slice();
+    for(let i = 0; i < copiedCurrentQuizAnswers.length; i++) {
         // 0 ~ 配列の長さ-1の範囲でランダムな値を取得する
         const random = Math.floor(Math.random() * (i + 1));
 
         // 配列内をシャッフルする
-        const tmp = arr[i];
-        arr[i] = arr[random];
-        arr[random] = tmp;
+        const tmp = copiedCurrentQuizAnswers[i];
+        copiedCurrentQuizAnswers[i] = copiedCurrentQuizAnswers[random];
+        copiedCurrentQuizAnswers[random] = tmp;
     }
-    return arr;
+    return copiedCurrentQuizAnswers;
 }
 
-
-const currentQuizIndex = 0;
-
 // 指定したインデックス番号に応じたクイズデータを取得してクイズ情報を生成する関数
-function acquireQuiz(quizIndex) {
+function acquireQuiz(_quizIndex) {
     fetchQuiz().then(response => {
         console.log("クイズデータ : ", response.results);  // TODO:後で消す
         return response.results;
     }).then(quizDataList => {
-        const currentQuiz = quizDataList[quizIndex];
-        console.log("問題文 : ", currentQuiz.question);  // TODO:後で消す
+        const currentQuiz = quizDataList[_quizIndex];
 
-        const quizAnswers = [];
-        quizAnswers.push(currentQuiz.correct_answer);
+        const currentQuizAnswers = [];
+        currentQuizAnswers.push(currentQuiz.correct_answer);
         currentQuiz.incorrect_answers.forEach(incorrect_answer => {
-            quizAnswers.push(incorrect_answer);
+            currentQuizAnswers.push(incorrect_answer);
         });
-        console.log("シャッフルした後のクイズの解答 : ", shuffleQuizAnswers(quizAnswers));  //TODO:後で消す
 
         // TODO:この後「問題文とシャッフルしたクイズの解答をHTMLにセットする(DOM操作)を行う関数」を実行する
+        divCurrentQuizQuestion.textContent = currentQuiz.question;
+        const shuffledAnswers = shuffleQuizAnswers(currentQuizAnswers);
+        appendAnswersToContainer(shuffledAnswers);
     });
 }
 
-acquireQuiz(currentQuizIndex);
+function appendAnswersToContainer(_quizAnswers) {
+    // ulタグ内を空にする
+    while(ulCurrentQuizAnswers.firstChild) {
+        ulCurrentQuizAnswers.removeChild(ulCurrentQuizAnswers.firstChild);
+    }
 
+    // クイズの解答数に応じてliタグをulタグに追加する
+    _quizAnswers.forEach((answer) => {
+        const liQuizAnswer = document.createElement("li");
+        liQuizAnswer.textContent = answer;
+        ulCurrentQuizAnswers.appendChild(liQuizAnswer);
+    });
+}
