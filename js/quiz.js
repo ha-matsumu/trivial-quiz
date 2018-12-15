@@ -1,3 +1,9 @@
+const divCurrentQuizQuestion = document.getElementById("currentQuizQuestion");
+const ulCurrentQuizAnswers = document.getElementById("currentQuizAnswers");
+const currentQuizIndex = 0;
+
+acquireQuiz(currentQuizIndex);
+
 // Fetch APIを使ってクイズデータを取得する
 function fetchQuiz() {
     return fetch('https://opentdb.com/api.php?amount=10&category=18&type=multiple')
@@ -7,21 +13,18 @@ function fetchQuiz() {
 }
 
 // 配列内の値をシャッフルする関数
-function shuffleQuizAnswers(_arr) {
-    for(let i = 0; i < _arr.length; i++) {
+function shuffleQuizAnswers(_answer) {
+    for(let i = 0; i < _answer.length; i++) {
         // 0 ~ 配列の長さ-1の範囲でランダムな値を取得する
         const random = Math.floor(Math.random() * (i + 1));
 
         // 配列内をシャッフルする
-        const tmp = _arr[i];
-        _arr[i] = _arr[random];
-        _arr[random] = tmp;
+        const tmp = _answer[i];
+        _answer[i] = _answer[random];
+        _answer[random] = tmp;
     }
-    return _arr;
+    return _answer;
 }
-
-
-const currentQuizIndex = 0;
 
 // 指定したインデックス番号に応じたクイズデータを取得してクイズ情報を生成する関数
 function acquireQuiz(_quizIndex) {
@@ -40,17 +43,12 @@ function acquireQuiz(_quizIndex) {
         console.log("シャッフルした後のクイズの解答 : ", shuffleQuizAnswers(quizAnswers));  //TODO:後で消す
 
         // TODO:この後「問題文とシャッフルしたクイズの解答をHTMLにセットする(DOM操作)を行う関数」を実行する
-        const DivCurrentQuizQuestion = document.getElementById("currentQuizQuestion");
-        DivCurrentQuizQuestion.textContent = currentQuiz.question;
-        addLisToUl(quizAnswers);
+        divCurrentQuizQuestion.textContent = currentQuiz.question;
+        appendAnswersToContainer(quizAnswers);
     });
 }
 
-acquireQuiz(currentQuizIndex);
-
-function addLisToUl(_quizAnswers) {
-    const ulCurrentQuizAnswers = document.getElementById("currentQuizAnswers");
-
+function appendAnswersToContainer(_quizAnswers) {
     // ulタグ内を空にする
     while(ulCurrentQuizAnswers.firstChild) {
         ulCurrentQuizAnswers.removeChild(ulCurrentQuizAnswers.firstChild);
