@@ -1,6 +1,7 @@
 (() => {
     const divCurrentQuizQuestion = document.getElementById("currentQuizQuestion");
     const ulCurrentQuizAnswers = document.getElementById("currentQuizAnswers");
+    const divNumberOfCorrectAnswers = document.getElementById("numberOfCorrectAnswers");
     let quizDataList;
     let currentQuizIndex = 0;
     let numberOfCorrectAnswers = 0;
@@ -47,7 +48,8 @@
     }
 
     function appendCurrentQuizToContainer(_currentQuiz) {
-        divCurrentQuizQuestion.textContent = _currentQuiz.question;
+        const currentQuestionText = "Q" + (currentQuizIndex + 1) + "." +  _currentQuiz.question;
+        divCurrentQuizQuestion.textContent = currentQuestionText;
 
         const currentQuizCorrectAnswer = _currentQuiz.correctAnswer;
         const shuffledAnswers = _currentQuiz.answers;
@@ -66,10 +68,15 @@
                 if(liQuizAnswer.textContent === currentQuizCorrectAnswer){
                     numberOfCorrectAnswers++;
                 }
-                console.log("現在の正解数は", numberOfCorrectAnswers, "です!"); //TODO:あとで消す
-                currentQuizIndex++;
-                const currentQuiz = prepareCurrentQuiz(currentQuizIndex);
-                appendCurrentQuizToContainer(currentQuiz);
+
+                if(currentQuizIndex === quizDataList.length-1) {
+                    const resultText = "Your score<br>" + numberOfCorrectAnswers + " / " + quizDataList.length;
+                    divNumberOfCorrectAnswers.innerHTML = resultText;
+                } else {
+                    currentQuizIndex++;
+                    const currentQuiz = prepareCurrentQuiz(currentQuizIndex);
+                    appendCurrentQuizToContainer(currentQuiz);
+                }
             });
 
             ulCurrentQuizAnswers.appendChild(liQuizAnswer);
