@@ -2,8 +2,6 @@
     const divCurrentQuizQuestion = document.getElementById("currentQuizQuestion");
     const ulCurrentQuizAnswers = document.getElementById("currentQuizAnswers");
     let quizDataList;
-    let currentQuiz;
-    const currentQuizAnswers = [];
     let currentQuizIndex = 0;
     let numberOfCorrectAnswers = 0;
 
@@ -18,18 +16,29 @@
             quizDataList = data;
             console.log("クイズデータ : ", quizDataList);  // TODO:後で消す  
                 
-            prepareCurrentQuiz(currentQuizIndex);
-            setCurrentQuiz(currentQuizIndex);      
+            const currentQuiz = prepareCurrentQuiz(currentQuizIndex);
+            appendCurrentQuizToContainer(currentQuiz);      
     });
 
-    // 配列内の値をシャッフルする関数
+    function prepareCurrentQuiz(_currentQuizIndex) {
+        const currentQuiz = {};
+        currentQuiz.question = quizDataList[_currentQuizIndex].question;
+        currentQuiz.correctAnswer = quizDataList[_currentQuizIndex].correct_answer;
+
+        const currentQuizAnswers = quizDataList[_currentQuizIndex].incorrect_answers;
+        currentQuizAnswers.push(currentQuiz.correctAnswer);
+        const shuffledCurrentAnswers = shuffleQuizAnswers(currentQuizAnswers);
+
+        currentQuiz.answers = shuffledCurrentAnswers;
+
+        return currentQuiz;
+    }
+
     function shuffleQuizAnswers(_answers) {
         const copiedCurrentQuizAnswers = _answers.slice();
         for(let i = 0; i < copiedCurrentQuizAnswers.length; i++) {
-            // 0 ~ 配列の長さ-1の範囲でランダムな値を取得する
             const random = Math.floor(Math.random() * (i + 1));
 
-            // 配列内をシャッフルする
             const tmp = copiedCurrentQuizAnswers[i];
             copiedCurrentQuizAnswers[i] = copiedCurrentQuizAnswers[random];
             copiedCurrentQuizAnswers[random] = tmp;
@@ -37,43 +46,33 @@
         return copiedCurrentQuizAnswers;
     }
 
-    function appendAnswersToContainer(_quizAnswers) {
+    function appendCurrentQuizToContainer(_currentQuiz) {
+        divCurrentQuizQuestion.textContent = _currentQuiz.question;
+
+        const currentQuizCorrectAnswer = _currentQuiz.correctAnswer;
+        const shuffledAnswers = _currentQuiz.answers;
+
         // ulタグ内を空にする
         while(ulCurrentQuizAnswers.firstChild) {
             ulCurrentQuizAnswers.removeChild(ulCurrentQuizAnswers.firstChild);
         }
 
         // クイズの解答数に応じてliタグをulタグに追加する
-        _quizAnswers.forEach((answer) => {
+        shuffledAnswers.forEach((answer) => {
             const liQuizAnswer = document.createElement("li");
             liQuizAnswer.textContent = answer;
 
             liQuizAnswer.addEventListener("click", () => {
-                if(liQuizAnswer.textContent === currentQuiz.correct_answer){
+                if(liQuizAnswer.textContent === currentQuizCorrectAnswer){
                     numberOfCorrectAnswers++;
                 }
                 console.log("現在の正解数は", numberOfCorrectAnswers, "です!"); //TODO:あとで消す
                 currentQuizIndex++;
-                prepareCurrentQuiz(currentQuizIndex);
-                setCurrentQuiz(currentQuizIndex);
+                const currentQuiz = prepareCurrentQuiz(currentQuizIndex);
+                appendCurrentQuizToContainer(currentQuiz);
             });
 
             ulCurrentQuizAnswers.appendChild(liQuizAnswer);
         });
-    }
-
-    function prepareCurrentQuiz(_quizIndex) {
-        currentQuiz = quizDataList[_quizIndex];
-        currentQuizAnswers.splice(0, currentQuizAnswers.length);
-        currentQuizAnswers.push(currentQuiz.correct_answer);
-        currentQuiz.incorrect_answers.forEach(incorrect_answer => {
-            currentQuizAnswers.push(incorrect_answer);
-        });
-    }
-
-    function setCurrentQuiz(_quizIndex) {
-        divCurrentQuizQuestion.textContent = currentQuiz.question;
-        const shuffledAnswers = shuffleQuizAnswers(currentQuizAnswers);
-        appendAnswersToContainer(shuffledAnswers);
     }
 })();
