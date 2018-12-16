@@ -55,7 +55,6 @@ function appendAnswersToContainer(_quizAnswers) {
 
 function prepareCurrentQuiz(_quizIndex) {
     currentQuiz = quizDataList[_quizIndex];
-
     currentQuizAnswers.splice(0, currentQuizAnswers.length);
     currentQuizAnswers.push(currentQuiz.correct_answer);
     currentQuiz.incorrect_answers.forEach(incorrect_answer => {
