@@ -65,14 +65,13 @@
             liQuizAnswer.textContent = answer;
 
             liQuizAnswer.addEventListener("click", () => {
-                if(liQuizAnswer.textContent === currentQuizCorrectAnswer){
-                    numberOfCorrectAnswers++;
-                }
-
                 if(currentQuizIndex === quizDataList.length-1) {
                     const resultText = "Your score<br>" + numberOfCorrectAnswers + " / " + quizDataList.length;
                     divNumberOfCorrectAnswers.innerHTML = resultText;
                 } else {
+                    if(liQuizAnswer.textContent === currentQuizCorrectAnswer){
+                        numberOfCorrectAnswers++;
+                    }
                     currentQuizIndex++;
                     const currentQuiz = prepareCurrentQuiz(currentQuizIndex);
                     appendCurrentQuizToContainer(currentQuiz);
