@@ -16,7 +16,6 @@ function fetchQuiz() {
 function shuffleQuizAnswers(_answers) {
     const copiedCurrentQuizAnswers = _answers.slice();
     for(let i = 0; i < copiedCurrentQuizAnswers.length; i++) {
-        // 0 ~ 配列の長さ-1の範囲でランダムな値を取得する
         const random = Math.floor(Math.random() * (i + 1));
 
         // 配列内をシャッフルする
