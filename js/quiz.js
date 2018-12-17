@@ -21,15 +21,16 @@
     });
 
     function prepareCurrentQuiz(_currentQuizIndex) {
-        const currentQuiz = {};
-        currentQuiz.question = quizDataList[_currentQuizIndex].question;
-        currentQuiz.correctAnswer = quizDataList[_currentQuizIndex].correct_answer;
+        const quiz = quizDataList[_currentQuizIndex];
+        const answers = quiz.incorrect_answers.slice();
+        answers.push(quiz.correct_answer);
+        const shuffledAnswers = shuffleQuizAnswers(answers);
 
-        const currentQuizAnswers = quizDataList[_currentQuizIndex].incorrect_answers;
-        currentQuizAnswers.push(currentQuiz.correctAnswer);
-        const shuffledCurrentAnswers = shuffleQuizAnswers(currentQuizAnswers);
-
-        currentQuiz.answers = shuffledCurrentAnswers;
+        const currentQuiz = {
+            question: quiz.question,
+            correctAnswer: quiz.correct_answer,
+            answers: shuffledAnswers
+        };
 
         return currentQuiz;
     }
@@ -49,21 +50,18 @@
     function appendCurrentQuizToContainer(_currentQuiz) {
         divCurrentQuizQuestion.textContent = _currentQuiz.question;
 
-        const currentQuizCorrectAnswer = _currentQuiz.correctAnswer;
-        const shuffledAnswers = _currentQuiz.answers;
-
         // ulタグ内を空にする
         while(ulCurrentQuizAnswers.firstChild) {
             ulCurrentQuizAnswers.removeChild(ulCurrentQuizAnswers.firstChild);
         }
 
         // クイズの解答数に応じてliタグをulタグに追加する
-        shuffledAnswers.forEach((answer) => {
+        _currentQuiz.answers.forEach((answer) => {
             const liQuizAnswer = document.createElement("li");
             liQuizAnswer.textContent = answer;
 
             liQuizAnswer.addEventListener("click", () => {
-                if(liQuizAnswer.textContent === currentQuizCorrectAnswer){
+                if(liQuizAnswer.textContent === _currentQuiz.correctAnswer){
                     numberOfCorrectAnswers++;
                 }
                 console.log("現在の正解数は", numberOfCorrectAnswers, "です!"); //TODO:あとで消す
