@@ -1,0 +1,38 @@
+body {
+  background-color: #383e4e;
+}
+
+.container {
+  margin: 50px auto;
+}
+
+.text-center {
+  text-align: center;
+}
+
+img {
+  display: block;
+  width: 80%;
+  margin: 0 auto;
+  max-width: 500px;
+}
+
+a {
+  display: block;
+  width: 160px;
+  padding: 0.8em;
+  text-align: center;
+  text-decoration: none;
+  color: white;
+  background: #16191f;
+  border: 2px solid rgba(0, 0, 0, 0.6);
+  border-radius: 15px;
+  transition: 0.4s;
+  margin: 0 auto;
+}
+
+a:hover {
+  background: #5c6378;
+  color: #fff;
+  border-color: #5c6378;
+}

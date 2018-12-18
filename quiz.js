@@ -1,7 +1,9 @@
 (() => {
   const divCurrentQuizQuestion = document.getElementById("currentQuizQuestion");
   const ulCurrentQuizAnswers = document.getElementById("currentQuizAnswers");
-  const divNumberOfCorrectAnswers = document.getElementById("numberOfCorrectAnswers");
+  const divNumberOfCorrectAnswers = document.getElementById(
+    "numberOfCorrectAnswers"
+  );
   let quizDataList;
   let currentQuizIndex = 0;
   let numberOfCorrectAnswers = 0;
@@ -51,7 +53,9 @@
   }
 
   function appendCurrentQuizToContainer(_currentQuiz) {
-    const currentQuestionText = "Q" + (currentQuizIndex + 1) + "." + _currentQuiz.question;
+    const currentQuestionText = `Q${currentQuizIndex + 1}. ${
+      _currentQuiz.question
+    }`;
     divCurrentQuizQuestion.textContent = currentQuestionText;
 
     // ulタグ内を空にする
@@ -65,14 +69,18 @@
       liQuizAnswer.textContent = answer;
 
       liQuizAnswer.addEventListener("click", () => {
-        if (currentQuizIndex === quizDataList.length - 1) {
-          const resultText = "Your score<br>" + numberOfCorrectAnswers + " / " + quizDataList.length;
+        currentQuizIndex++;
+        if (currentQuizIndex === quizDataList.length) {
+          const resultText = `Your Score<br>${numberOfCorrectAnswers} / ${quizDataList.length}`;
           divNumberOfCorrectAnswers.innerHTML = resultText;
         } else {
           if (liQuizAnswer.textContent === _currentQuiz.correctAnswer) {
             numberOfCorrectAnswers++;
+            alert("You got it right!!");
+          } else {
+            alert(`You got it wrong. The answer of this question is "${_currentQuiz.correctAnswer}".`
+            );
           }
-          currentQuizIndex++;
           const currentQuiz = prepareCurrentQuiz(currentQuizIndex);
           appendCurrentQuizToContainer(currentQuiz);
         }
