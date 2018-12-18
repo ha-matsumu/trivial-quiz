@@ -1,0 +1,20 @@
+body {
+  background-color: #383e4e;
+}
+
+#currentQuizQuestion {
+  color: #0ce3ac;
+}
+
+#main,
+a {
+  color: white;
+}
+
+.text-center {
+  text-align: center;
+}
+
+img {
+  width: 500px;
+}
