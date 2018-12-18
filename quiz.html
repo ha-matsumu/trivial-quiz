@@ -4,11 +4,17 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="stylesheet" href="css/quiz.css" />
     <title>Trivial Quiz</title>
   </head>
   <body>
-    <div id="currentQuizQuestion"></div>
-    <div><ul id="currentQuizAnswers"></ul></div>
-    <script src="js/quiz.js"></script>
+    <div class="container">
+      <div id="currentQuizQuestion">Now Loading...</div>
+      <ul id="currentQuizAnswers"></ul>
+      <hr />
+      <div id="numberOfCorrectAnswers"></div>
+      <a href="index.html">Top Page</a>
+    </div>
+    <script src="quiz.js"></script>
   </body>
 </html>

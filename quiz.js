@@ -1,6 +1,9 @@
 (() => {
   const divCurrentQuizQuestion = document.getElementById("currentQuizQuestion");
   const ulCurrentQuizAnswers = document.getElementById("currentQuizAnswers");
+  const divNumberOfCorrectAnswers = document.getElementById(
+    "numberOfCorrectAnswers"
+  );
   let quizDataList;
   let currentQuizIndex = 0;
   let numberOfCorrectAnswers = 0;
@@ -46,11 +49,14 @@
       copiedCurrentQuizAnswers[i] = copiedCurrentQuizAnswers[random];
       copiedCurrentQuizAnswers[random] = tmp;
     }
-    return cßopiedCurrentQuizAnswers;
+    return copiedCurrentQuizAnswers;
   }
 
   function appendCurrentQuizToContainer(_currentQuiz) {
-    divCurrentQuizQuestion.textContent = _currentQuiz.question;
+    const currentQuestionText = `Q${currentQuizIndex + 1}. ${
+      _currentQuiz.question
+    }`;
+    divCurrentQuizQuestion.textContent = currentQuestionText;
 
     // ulタグ内を空にする
     while (ulCurrentQuizAnswers.firstChild) {
@@ -63,13 +69,21 @@
       liQuizAnswer.textContent = answer;
 
       liQuizAnswer.addEventListener("click", () => {
-        if (liQuizAnswer.textContent === _currentQuiz.correctAnswer) {
-          numberOfCorrectAnswers++;
-        }
-        console.log("現在の正解数は", numberOfCorrectAnswers, "です!"); //TODO:あとで消す
         currentQuizIndex++;
-        const currentQuiz = prepareCurrentQuiz(currentQuizIndex);
-        appendCurrentQuizToContainer(currentQuiz);
+        if (currentQuizIndex === quizDataList.length) {
+          const resultText = `Your Score<br>${numberOfCorrectAnswers} / ${quizDataList.length}`;
+          divNumberOfCorrectAnswers.innerHTML = resultText;
+        } else {
+          if (liQuizAnswer.textContent === _currentQuiz.correctAnswer) {
+            numberOfCorrectAnswers++;
+            alert("You got it right!!");
+          } else {
+            alert(`You got it wrong. The answer of this question is "${_currentQuiz.correctAnswer}".`
+            );
+          }
+          const currentQuiz = prepareCurrentQuiz(currentQuizIndex);
+          appendCurrentQuizToContainer(currentQuiz);
+        }
       });
 
       ulCurrentQuizAnswers.appendChild(liQuizAnswer);
