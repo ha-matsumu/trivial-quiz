@@ -19,7 +19,6 @@
     })
     .then(data => {
       quizDataList = data;
-      console.log("クイズデータ : ", quizDataList); // TODO:後で消す
 
       const currentQuiz = prepareCurrentQuiz(currentQuizIndex);
       appendCurrentQuizToContainer(currentQuiz);
